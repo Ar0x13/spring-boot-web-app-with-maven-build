@@ -19,7 +19,8 @@
 	      <artifactId>spring-boot-starter-web</artifactId>
 	   </dependency>
 	</dependencies>
-
+        
+	// to create an executable jar
 	<build>
 	   <plugins>
 	      <plugin>
