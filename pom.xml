@@ -20,7 +20,7 @@
 	   </dependency>
 	</dependencies>
         
-	// to create an executable jar
+	<!-- Package as an executable jar/war -->
 	<build>
 	   <plugins>
 	      <plugin>
