@@ -31,17 +31,20 @@ pipeline {
         }  
 
         stage('Prepare environment') { 
-            agent any
             steps {  
                 checkout scm         
             }
         }
 
-        stage('Build') { 
-            agent any
-
+        stage('Build') {           
             steps {               
                 sh "mvn ${env.MAVEN_PARAMS}"
+            }
+            
+            post {
+                success {
+                    junit 'target/surefire-reports/**/*.xml' 
+                }
             }            
         }
 
