@@ -33,12 +33,14 @@ pipeline {
         stage('Prepare environment') { 
             agent any
             steps {
-                sshagent (credentials: ['jenkins-ssh-key']) {
-                    sh 'printenv'
-                    sh 'ssh-add -l -o StrictHostKeyChecking=no '
-                    git branch: 'master', url: 'git@github.com:Ar0x13/spring-boot-web-app-with-maven-build.git'
-                    checkout scm
-                }                
+                // sshagent (credentials: ['jenkins-ssh-key']) {
+                //     sh 'printenv'
+                //     sh 'ssh-add -l -o StrictHostKeyChecking=no '
+                //     git branch: 'master', url: 'git@github.com:Ar0x13/spring-boot-web-app-with-maven-build.git'
+                //     checkout scm
+                // }       
+                git branch: 'master', url: 'git@github.com:Ar0x13/spring-boot-web-app-with-maven-build.git'
+                checkout scm         
             }
         }
 
