@@ -14,8 +14,17 @@
 		<version>2.1.1.RELEASE</version>
 	</parent>
 
-	<!-- This is a web application -->
+	
 	<dependencies>
+	   <!-- For JUnit tests -->
+	   <dependency>
+	      <groupId>junit</groupId>
+	      <artifactId>junit</artifactId>
+	      <version>4.11</version>
+	      <scope>test</scope>
+	   </dependency>
+		
+	   <!-- This is a web application -->
 	   <dependency>
 	      <groupId>org.springframework.boot</groupId>
 	      <artifactId>spring-boot-starter-web</artifactId>
