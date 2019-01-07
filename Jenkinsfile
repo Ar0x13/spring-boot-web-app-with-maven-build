@@ -1,4 +1,3 @@
-
 pipeline {
     agent any 
     
@@ -18,7 +17,7 @@ pipeline {
     }
     
     parameters {
-        string(defaultValue: "install", description: "What Maven goal to call", name: "MAVEN_GOAL")
+        stringParam(defaultValue: "install", description: "What Maven goal to call", name: "MAVEN_GOAL")
     }
 
     stages {   
@@ -48,37 +47,10 @@ pipeline {
         stage('Build') { 
             agent any
 
-            steps {
-                // withCredentials([sshUserPrivateKey(credentialsId: '58813893-d334-4f40-9a70-196b5fe89664', \
-                //                     keyFileVariable: '', \
-                //                     passphraseVariable: '', \
-                //                     usernameVariable: '')]) {
-                
-                // }
-                
-                withMaven(maven: 'M3', mavenSettingsConfig: 'mvn-setting-xml') {
-                    sh "mvn clean ${env.MAVEN_GOAL}"
-                }
-                
-                post {
-                    success {
-                        archive "**/target/**/*.jar"
-                        junit '**/target/surefire-reports/*.xml'
-                    }
-                }
-            }
+            steps {               
+                sh "mvn clean ${env.MAVEN_GOAL}"
+            }            
         }
 
-        stage('Test') { 
-            steps {
-                sh 'echo Hello test step' 
-            }
-        }
-
-        stage('Deploy') { 
-            steps {
-                sh 'echo Hello Deploy step'
-            }
-        }
     }
 }
