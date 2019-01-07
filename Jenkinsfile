@@ -39,7 +39,7 @@ pipeline {
                 //     git branch: 'master', url: 'git@github.com:Ar0x13/spring-boot-web-app-with-maven-build.git'
                 //     checkout scm
                 // }       
-                git branch: 'master', url: 'git@github.com:Ar0x13/spring-boot-web-app-with-maven-build.git'
+                git url: 'git@github.com:Ar0x13/spring-boot-web-app-with-maven-build.git'
                 checkout scm         
             }
         }
