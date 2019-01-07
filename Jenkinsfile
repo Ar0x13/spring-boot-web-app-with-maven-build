@@ -17,7 +17,7 @@ pipeline {
     }
     
     parameters {
-        stringParam(defaultValue: "install", description: "What Maven goal to call", name: "MAVEN_GOAL")
+        string(defaultValue: "install", description: "What Maven goal to call", name: "MAVEN_GOAL")
     }
 
     stages {   
