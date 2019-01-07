@@ -5,7 +5,7 @@ pipeline {
         jdk 'jdk8'
         maven 'mvn3'
     }
-    
+
     // using the Timestamper plugin we can add timestamps to the console log
     options {
         timestamps()
@@ -33,9 +33,12 @@ pipeline {
         stage('Prepare environment') { 
             agent any
             steps {
-                git branch: 'master', url: 'git@github.com:Ar0x13/spring-boot-web-app-with-maven-build.git'
-                checkout scm
-                
+                sshagent (['jenkins-ssh-key']) {
+                    sh 'printenv'
+                    sh 'ssh-add -l'
+                    git branch: 'master', url: 'git@github.com:Ar0x13/spring-boot-web-app-with-maven-build.git'
+                    checkout scm
+                }                
             }
         }
 
