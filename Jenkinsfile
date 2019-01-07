@@ -11,9 +11,9 @@ pipeline {
         timestamps()
     }
    
-    parameters {
-        string(defaultValue: "install", description: "What Maven goal to call", name: "MAVEN_GOAL")
-    }
+    // parameters {
+    //     string(defaultValue: "install", description: "What Maven goal to call", name: "MAVEN_GOAL")
+    // }
 
     stages {   
         stage('test java installation') {
@@ -33,9 +33,9 @@ pipeline {
         stage('Prepare environment') { 
             agent any
             steps {
-                sshagent (['jenkins-ssh-key']) {
+                sshagent (credentials: ['jenkins-ssh-key']) {
                     sh 'printenv'
-                    sh 'ssh-add -l'
+                    sh 'ssh-add -l -o StrictHostKeyChecking=no '
                     git branch: 'master', url: 'git@github.com:Ar0x13/spring-boot-web-app-with-maven-build.git'
                     checkout scm
                 }                
@@ -46,7 +46,8 @@ pipeline {
             agent any
 
             steps {               
-                sh "mvn clean ${env.MAVEN_GOAL}"
+                // sh "mvn clean ${env.MAVEN_GOAL}"
+                sh "mvn clean install"
             }            
         }
 
