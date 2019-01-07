@@ -39,14 +39,18 @@ pipeline {
         stage('Build') {           
             steps {               
                 sh "mvn ${env.MAVEN_PARAMS}"
-            }
-            
-            post {
-                success {
-                    junit 'target/surefire-reports/**/*.xml' 
-                }
-            }            
+            }              
         }
-
+        
+        stage('Test') {
+            steps {
+                sh 'mvn test'
+            }
+            post {
+                always {
+                    junit 'target/surefire-reports/*.xml'
+                }
+            }
+        }
     }
 }
