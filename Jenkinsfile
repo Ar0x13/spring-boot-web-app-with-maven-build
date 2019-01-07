@@ -11,9 +11,9 @@ pipeline {
         timestamps()
     }
    
-    parameters {
-        string(defaultValue: "clean install", description: "What Maven goal to call", name: "MAVEN_PARAMS")
-    }
+    // parameters {
+    //     string(defaultValue: "clean install", description: "What Maven goal to call", name: "MAVEN_PARAMS")
+    // }
 
     stages {   
         stage('test java installation') {
@@ -38,10 +38,17 @@ pipeline {
 
         stage('Build') {           
             steps {               
-                sh "mvn ${env.MAVEN_PARAMS}"
+                // sh "mvn ${env.MAVEN_PARAMS}"
+                sh "mvn clean install"
             }              
         }
         
+        stage('Deploy to PROD') {
+            steps {
+                sh 'echo GG'
+            }
+        }
+
 
     }
 }
