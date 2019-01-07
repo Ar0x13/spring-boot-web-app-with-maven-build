@@ -5,17 +5,12 @@ pipeline {
         jdk 'jdk8'
         maven 'mvn3'
     }
+    
     // using the Timestamper plugin we can add timestamps to the console log
     options {
         timestamps()
     }
-
-    environment {
-        //Use Pipeline Utility Steps plugin to read information from pom.xml into env variables
-        IMAGE = readMavenPom().getArtifactId()
-        VERSION = readMavenPom().getVersion()
-    }
-    
+   
     parameters {
         string(defaultValue: "install", description: "What Maven goal to call", name: "MAVEN_GOAL")
     }
