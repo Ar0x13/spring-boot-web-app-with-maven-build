@@ -18,7 +18,7 @@ pipeline {
     }
     
     parameters {
-        stringParam(defaultValue: "install", description: "What Maven goal to call", name: "MAVEN_GOAL")
+        string(defaultValue: "install", description: "What Maven goal to call", name: "MAVEN_GOAL")
     }
 
     stages {   
@@ -71,13 +71,13 @@ pipeline {
 
         stage('Test') { 
             steps {
-                // 
+                sh 'echo Hello test step' 
             }
         }
 
         stage('Deploy') { 
             steps {
-                // 
+                sh 'echo Hello Deploy step'
             }
         }
     }
