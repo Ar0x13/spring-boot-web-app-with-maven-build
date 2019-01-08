@@ -46,15 +46,9 @@ pipeline {
         stage('Build') {           
             steps {               
                 // sh "mvn ${env.MAVEN_PARAMS}"
-                sh "mvn clean install"              
-            }
-            post {
-                success {
-                    // archiveArtifacts artifacts: '**/target/*.jar', fingerprint: true, onlyIfSuccessful: true
-                    stash includes: '**/target/*.jar', name: 'app' 
-                    
-                }
-            }              
+                sh "mvn clean install" 
+                stash includes: '**/target/*.jar', name: 'app'             
+            }            
         }
         
         stage('Deploy to PROD1') {                       
