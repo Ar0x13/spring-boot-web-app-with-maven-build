@@ -15,7 +15,11 @@ pipeline {
     }
     
     // parameters {
-    //     string(name: "MAVEN_PARAMS", defaultValue: "clean install", description: "What Maven goal to call")
+    //  string(
+        //     name: "MAVEN_PARAMS", 
+        //     defaultValue: "clean install", 
+        //     description: "What Maven goal to call"
+        // )
     // }
    
     stages {   
@@ -42,30 +46,63 @@ pipeline {
         stage('Build') {           
             steps {               
                 // sh "mvn ${env.MAVEN_PARAMS}"
-                sh "mvn clean install"
-                archiveArtifacts artifacts: '**/target/*.jar', fingerprint: true, onlyIfSuccessful: true
+                sh "mvn clean install"              
+            }
+            post {
+                success {
+                    // archiveArtifacts artifacts: '**/target/*.jar', fingerprint: true, onlyIfSuccessful: true
+                    // stash includes: '**/target/*.jar', name: 'app' 
+                    stash excludes: 'target/', name: 'app'
+                }
             }              
         }
         
-        stage('Deploy to PROD') {
+        stage('Deploy to PROD1') {                       
             agent {
-                label 'prod'
+                node 'prod1'
             }
+
             when {
                 branch 'master'
             }
-            steps {
-                step([  $class: 'CopyArtifact',
-                    filter: '**/target/*.jar',
-                    fingerprintArtifacts: true,
-                    projectName: '${JOB_NAME}',
-                    selector: [$class: 'SpecificBuildSelector', buildNumber: '${BUILD_NUMBER}'],
-                    target: '/home/jenkins'
-                ])
-                sh 'nohup java -jar /home/jenkins/target/*.jar &'
+
+            steps {               
+                unstash 'app'
+                sh 'hostname'
+                sh 'ls -la /home/jenkins'
+                // sh 'nohup java -jar /home/jenkins/target/*.jar &'            
             }
+
+            
+                // Arhchieve ?
+                // step([  $class: 'CopyArtifact',
+                //     filter: '**/target/*.jar',
+                //     fingerprintArtifacts: true,
+                //     projectName: '${JOB_NAME}',
+                //     selector: [$class: 'SpecificBuildSelector', buildNumber: '${BUILD_NUMBER}'],
+                //     target: '/home/jenkins'
+                // ])               
+        }
+            
+        stage('Deploy to PROD2') {                       
+            agent {
+                node 'prod2'
+            }
+
+            when {
+                branch 'master'
+            }
+            
+            steps {               
+                unstash 'app'
+                sh 'hostname'
+                sh 'ls -la /home/jenkins'
+                // sh 'nohup java -jar /home/jenkins/target/*.jar &'            
+            }
+            
         }
     }
+    
     post {
         success {
             echo 'Build succeeded.'
@@ -78,5 +115,5 @@ pipeline {
         failure {
             echo 'This build has failed. See logs for details.'
         }
-     }
- }
+    }
+}
