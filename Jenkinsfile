@@ -73,6 +73,6 @@ pipeline {
         failure {
             echo 'This build has failed. See logs for details.'
         }
-      }
-    }
-}
+     }
+ }
+
