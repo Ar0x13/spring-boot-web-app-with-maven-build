@@ -55,7 +55,7 @@ pipeline {
                     fingerprintArtifacts: true,
                     projectName: '${JOB_NAME}',
                     selector: [$class: 'SpecificBuildSelector', buildNumber: '${BUILD_NUMBER}'],
-                    target: '/home/jenkins/'])
+                    target: '/home/jenkins/'
                 ])
                 sh 'ls -la /home/jenkins/'
             }
