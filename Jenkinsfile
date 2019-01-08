@@ -51,8 +51,8 @@ pipeline {
             post {
                 success {
                     // archiveArtifacts artifacts: '**/target/*.jar', fingerprint: true, onlyIfSuccessful: true
-                    // stash includes: '**/target/*.jar', name: 'app' 
-                    stash excludes: 'target/', name: 'app'
+                    stash includes: '**/target/*.jar', name: 'app' 
+                    
                 }
             }              
         }
