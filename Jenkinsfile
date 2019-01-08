@@ -1,5 +1,7 @@
 pipeline {
-    agent slave
+    agent {
+        slave
+    }
     
     tools {
         jdk 'jdk8'
