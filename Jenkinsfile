@@ -1,5 +1,5 @@
 pipeline {
-    agent any 
+    agent slave
     
     tools {
         jdk 'jdk8'
@@ -9,12 +9,13 @@ pipeline {
     // using the Timestamper plugin we can add timestamps to the console log
     options {
         timestamps()
+        timeout(time: 1, unit: 'HOURS')
     }
-   
+    
     // parameters {
-    //     string(defaultValue: "clean install", description: "What Maven goal to call", name: "MAVEN_PARAMS")
+    //     string(name: "MAVEN_PARAMS", defaultValue: "clean install", description: "What Maven goal to call")
     // }
-
+   
     stages {   
         stage('test java installation') {
             steps {
@@ -40,15 +41,38 @@ pipeline {
             steps {               
                 // sh "mvn ${env.MAVEN_PARAMS}"
                 sh "mvn clean install"
+                archiveArtifacts artifacts: '**/target/*.jar', fingerprint: true, onlyIfSuccessful: true
             }              
         }
         
         stage('Deploy to PROD') {
+            when {
+                branch 'master'
+            }
             steps {
-                sh 'echo GG'
+                step([  $class: 'CopyArtifact',
+                    filter: '**/target/*.jar',
+                    fingerprintArtifacts: true,
+                    projectName: '${JOB_NAME}',
+                    selector: [$class: 'SpecificBuildSelector', buildNumber: '${BUILD_NUMBER}'],
+                    target: '/home/jenkins/'])
+                ])
+                sh 'ls -la /home/jenkins/'
             }
         }
+    }
+    post {
+        success {
+            echo 'Build succeeded.'
+        }
 
+        unstable {
+            echo 'This build returned an unstable status.'
+        }
 
+        failure {
+            echo 'This build has failed. See logs for details.'
+        }
+      }
     }
 }
