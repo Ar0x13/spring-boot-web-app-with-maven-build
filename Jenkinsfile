@@ -67,9 +67,8 @@ pipeline {
             }
 
             steps {               
+                sh 'pwd' 
                 unstash 'app'
-                sh 'hostname'
-                sh 'ls -la /home/jenkins'
                 // sh 'nohup java -jar /home/jenkins/target/*.jar &'            
             }
 
@@ -93,16 +92,15 @@ pipeline {
                 branch 'master'
             }
             
-            steps {               
+            steps {      
+                sh 'pwd'         
                 unstash 'app'
-                sh 'hostname'
-                sh 'ls -la /home/jenkins'
                 // sh 'nohup java -jar /home/jenkins/target/*.jar &'            
             }
             
         }
     }
-    
+
     post {
         success {
             echo 'Build succeeded.'
