@@ -11,7 +11,7 @@ pipeline {
     // using the Timestamper plugin we can add timestamps to the console log
     options {
         timestamps()
-        timeout(time: 1, unit: 'HOURS')
+        timeout(time: 20, unit: 'MINUTES')
     }
     
     // parameters {
@@ -48,6 +48,9 @@ pipeline {
         }
         
         stage('Deploy to PROD') {
+            agent {
+                label 'prod'
+            }
             when {
                 branch 'master'
             }
@@ -57,9 +60,9 @@ pipeline {
                     fingerprintArtifacts: true,
                     projectName: '${JOB_NAME}',
                     selector: [$class: 'SpecificBuildSelector', buildNumber: '${BUILD_NUMBER}'],
-                    target: '/tmp/jenkins'
+                    target: '/home/jenkins'
                 ])
-                sh 'ls -la /home/jenkins/'
+                sh 'nohup java -jar /home/jenkins/target/*.jar &'
             }
         }
     }
@@ -77,4 +80,3 @@ pipeline {
         }
      }
  }
-
