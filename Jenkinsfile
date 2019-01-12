@@ -60,46 +60,42 @@ pipeline {
             agent {
                 node 'prod1'
             }
-
             when {
                 branch 'master'
             }
 
             steps {               
-                sh 'pwd'                            
-                sh 'make publish'
-          
+                sh 'pwd'                          
                 // unstash 'app'
-                // sh 'nohup java -jar /home/jenkins/target/*.jar &'            
-            }
-
-            
-                // Arhchieve ?
-                // step([  $class: 'CopyArtifact',
-                //     filter: '**/target/*.jar',
-                //     fingerprintArtifacts: true,
-                //     projectName: '${JOB_NAME}',
-                //     selector: [$class: 'SpecificBuildSelector', buildNumber: '${BUILD_NUMBER}'],
-                //     target: '/home/jenkins'
-                // ])               
+                // sh 'nohup java -jar /home/jenkins/target/*.jar &'  
+                step([  $class: 'CopyArtifact',
+                        filter: 'target/*.jar',
+                        fingerprintArtifacts: true,
+                        projectName: '${JOB_NAME}',
+                        selector: [$class: 'SpecificBuildSelector', buildNumber: '${BUILD_NUMBER}']
+                ])    
+            }            
+       
         }
             
         stage('Deploy to PROD2') {                       
             agent {
                 node 'prod2'
             }
-
             when {
                 branch 'master'
             }
             
             steps {      
-                sh 'pwd'                            
-                sh 'make publish'
+                sh 'pwd'                          
                 // unstash 'app'
-                // sh 'nohup java -jar /home/jenkins/target/*.jar &'            
-            }
-            
+                // sh 'nohup java -jar /home/jenkins/target/*.jar &'  
+                step([  $class: 'CopyArtifact',
+                        filter: 'target/*.jar',
+                        fingerprintArtifacts: true,
+                        projectName: '${JOB_NAME}',
+                        selector: [$class: 'SpecificBuildSelector', buildNumber: '${BUILD_NUMBER}']
+                ])                
         }
     }
 
