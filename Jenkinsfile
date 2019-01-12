@@ -68,10 +68,9 @@ pipeline {
             }
 
             steps {               
-                sh 'pwd'          
-                 dir("app") {
-                    unstash "app"
-                 }
+                sh 'pwd'        
+                unstash "app"
+                
                 // sh 'nohup java -jar /home/jenkins/target/*.jar &' 
 
                 // Arhchieve ?
@@ -96,9 +95,7 @@ pipeline {
             
             steps {      
                 sh 'pwd'                            
-                dir("app") {
-                    unstash "app"
-                }
+                unstash "app"
                 
                 // sh 'nohup java -jar /home/jenkins/target/*.jar &'
                 //step([  $class: 'CopyArtifact',
