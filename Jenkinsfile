@@ -46,9 +46,14 @@ pipeline {
         stage('Build') {           
             steps {               
                 // sh "mvn ${env.MAVEN_PARAMS}"
-                sh "mvn clean install" 
-                stash includes: '**/target/*.jar', name: 'app'             
-            }            
+                sh "mvn clean install"                           
+            }
+            post {
+                success {
+                    // Archive the built artifacts
+                    archive includes: '**/target/*.jar', fingerprint: true
+                }
+            }
         }
         
         stage('Deploy to PROD1') {                       
@@ -61,8 +66,10 @@ pipeline {
             }
 
             steps {               
-                sh 'pwd' 
-                unstash 'app'
+                sh 'pwd'                            
+                sh 'make publish'
+          
+                // unstash 'app'
                 // sh 'nohup java -jar /home/jenkins/target/*.jar &'            
             }
 
@@ -87,8 +94,9 @@ pipeline {
             }
             
             steps {      
-                sh 'pwd'         
-                unstash 'app'
+                sh 'pwd'                            
+                sh 'make publish'
+                // unstash 'app'
                 // sh 'nohup java -jar /home/jenkins/target/*.jar &'            
             }
             
