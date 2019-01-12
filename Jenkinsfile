@@ -51,7 +51,7 @@ pipeline {
             post {
                 success {
                     // Archive the built artifacts
-                    archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
+                    archiveArtifacts artifacts: 'target/*.jar', onlyIfSuccessful: true, fingerprint: true
                 }
             }
         }
