@@ -50,8 +50,9 @@ pipeline {
             }
             post {
                 success {
+                    stash name: "app", includes: "**/target/*.jar"
                     // Archive the built artifacts
-                    archiveArtifacts artifacts: 'target/*.jar', onlyIfSuccessful: true, fingerprint: true
+                    // archiveArtifacts artifacts: 'target/*.jar', onlyIfSuccessful: true, fingerprint: true
                 }
             }
         }
@@ -66,21 +67,21 @@ pipeline {
             }
 
             steps {               
-                sh 'pwd'                          
-                // unstash 'app'
+                sh 'pwd'          
+                dir("/home/jenkins") {
+                    unstash "app"
+                }
                 // sh 'nohup java -jar /home/jenkins/target/*.jar &' 
 
                 // Arhchieve ?
-                step([  $class: 'CopyArtifact',
-                    filter: '*/target/*.jar',
-                    fingerprintArtifacts: true,
-                    projectName: '${JOB_NAME}',
-                    selector: [$class: 'SpecificBuildSelector', buildNumber: '${BUILD_NUMBER}']                    
-                ])             
-            }
-
-            
-             
+                // step([  $class: 'CopyArtifact',
+                //     filter: '*/target/*.jar',
+                //     fingerprintArtifacts: true,
+                //     projectName: '${JOB_NAME}',
+                //     selector: [$class: 'SpecificBuildSelector', buildNumber: '${BUILD_NUMBER}'],
+                //     target: '/home/jenkins'                 
+                // ])             
+            }   
         }
             
         stage('Deploy to PROD2') {                       
@@ -94,15 +95,18 @@ pipeline {
             
             steps {      
                 sh 'pwd'                            
-
-                // unstash 'app'
+                dir("/home/jenkins") {
+                    unstash "app"
+                }
+                
                 // sh 'nohup java -jar /home/jenkins/target/*.jar &'
-                step([  $class: 'CopyArtifact',
-                    filter: '*/target/*.jar',
-                    fingerprintArtifacts: true,
-                    projectName: '${JOB_NAME}',
-                    selector: [$class: 'SpecificBuildSelector', buildNumber: '${BUILD_NUMBER}']                    
-                ])                      
+                // step([  $class: 'CopyArtifact',
+                //     filter: '*/target/*.jar',
+                //     fingerprintArtifacts: true,
+                //     projectName: '${JOB_NAME}',
+                //     selector: [$class: 'SpecificBuildSelector', buildNumber: '${BUILD_NUMBER}'],
+                //     target: '/home/jenkins'                  
+                // ])                      
             }
             
         }
