@@ -50,7 +50,8 @@ pipeline {
             }
             post {
                 success {
-                    stash name: "app", includes: "**/target/*.jar"
+                    stash name: "app", includes: "target/*.jar"
+                    // stash name: "app", includes: "**/target/*.jar"
                     // Archive the built artifacts
                     // archiveArtifacts artifacts: 'target/*.jar', onlyIfSuccessful: true, fingerprint: true
                 }
