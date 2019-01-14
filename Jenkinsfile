@@ -61,10 +61,6 @@ pipeline {
                 node 'prod1'
             }
 
-            when {
-                branch 'master'
-            }
-
             steps {               
                 sh 'pwd'        
                 // unstash "app"
@@ -85,10 +81,6 @@ pipeline {
         stage('Deploy to PROD2') {                       
             agent {
                 node 'prod2'
-            }
-
-            when {
-                branch 'master'
             }
             
             steps {      
