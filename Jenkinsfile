@@ -38,9 +38,12 @@ pipeline {
         }  
 
         stage('Build') {           
-            steps {               
-                checkout scm
+            steps {  
+                // checkout code from repo
+                checkout scm                      
+               
                 // sh "mvn ${env.MAVEN_PARAMS}"
+                // build project, but skip running tests
                 sh "mvn clean install"                           
             }
             post {
