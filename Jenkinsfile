@@ -37,14 +37,9 @@ pipeline {
             }
         }  
 
-        stage('Prepare environment') { 
-            steps {  
-                checkout scm         
-            }
-        }
-
         stage('Build') {           
             steps {               
+                checkout scm
                 // sh "mvn ${env.MAVEN_PARAMS}"
                 sh "mvn clean install"                           
             }
