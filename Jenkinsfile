@@ -61,31 +61,42 @@ pipeline {
         }
 
         stage('Deploy to prod1') {
-            steps { 
+            steps {
                 // stop all java processes
-                sh ' pkill -f 'java -jar' ' 
-                
+                sh ' pkill -f 'java -jar' '  
+            }
+
+            steps { 
+
                 // copy artifcat to production nodes         
                 sshPublisher(publishers: [sshPublisherDesc(configName: 'prod1', transfers: [sshTransfer(cleanRemote: false, excludes: '',
                                         execCommand: 'ls -l $HOME', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false,
                                         patternSeparator: '[, ]+', remoteDirectorySDF: false, removePrefix: 'target', sourceFiles: 'target/*.jar')],
                                         usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
+            }
+
+            steps {
                 // run jar file
                 sh 'java -jar $HOME/*.jar'
             }
         }
 
         stage('Deploy to prod2') {
-            steps {       
+            steps {
                 // stop all java processes
-                sh ' pkill -f 'java -jar' '   
-                
+                sh ' pkill -f 'java -jar' '  
+            }
+            
+            steps {       
                 // copy artifcat to production nodes 
                 sshPublisher(publishers: [sshPublisherDesc(configName: 'prod1', transfers: [sshTransfer(cleanRemote: false, excludes: '',
                                         execCommand: 'ls -l $HOME', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false,
                                         patternSeparator: '[, ]+', remoteDirectorySDF: false, removePrefix: 'target', sourceFiles: 'target/*.jar')],
                                         usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
                 
+            }
+            
+            steps {
                 // run jar file
                 sh 'java -jar $HOME/*.jar'
             }
