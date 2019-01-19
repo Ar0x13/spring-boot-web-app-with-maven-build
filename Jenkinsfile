@@ -67,6 +67,7 @@ pipeline {
                                         execCommand: 'java -jar $HOME/*.jar', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false,
                                         patternSeparator: '[, ]+', remoteDirectorySDF: false, removePrefix: 'target', sourceFiles: 'target/*.jar')],
                                         usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
+            }
         }
 
         stage('Deploy to prod2') {
