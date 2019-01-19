@@ -63,7 +63,7 @@ pipeline {
         stage('Deploy to prod1') {
             steps { 
                 // stop all java processes
-                sh ' pkill -f \'java -jar\' '  
+                sh 'ssh jenkins@$prod1 'pkill -f \'java -jar\' '
 
                 // copy artifcat to production nodes         
                 sshPublisher(publishers: [sshPublisherDesc(configName: 'prod1', transfers: [sshTransfer(cleanRemote: false, excludes: '',
@@ -78,16 +78,13 @@ pipeline {
 
         stage('Deploy to prod2') {
             steps {  
-                // stop all java processes
-                sh ' pkill -f \'java -jar\' '    
+                sh 'ssh systemsboy@$prod2 'pkill -f \'java -jar\' '
 
                 // copy artifcat to production nodes 
-                sshPublisher(publishers: [sshPublisherDesc(configName: 'prod1', transfers: [sshTransfer(cleanRemote: false, excludes: '',
-                                        execCommand: 'ls -l $HOME', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false,
+                sshPublisher(publishers: [sshPublisherDesc(configName: 'prod2', transfers: [sshTransfer(cleanRemote: false, excludes: '',
+                                        execCommand: ' java -jar $HOME/*.jar', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false,
                                         patternSeparator: '[, ]+', remoteDirectorySDF: false, removePrefix: 'target', sourceFiles: 'target/*.jar')],
                                         usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
-                // run jar file
-                sh 'java -jar $HOME/*.jar'
             }
         }
     }
