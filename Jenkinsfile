@@ -64,7 +64,7 @@ pipeline {
             steps {           
                 sshPublisher(publishers: [sshPublisherDesc(configName: 'prod1', transfers: [sshTransfer(cleanRemote: false, excludes: '',
                                         execCommand: 'ls -l $HOME', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false,
-                                        patternSeparator: '[, ]+', remoteDirectory: '$HOME', remoteDirectorySDF: false, removePrefix: 'target', sourceFiles: 'target/*.jar')],
+                                        patternSeparator: '[, ]+', remoteDirectorySDF: false, removePrefix: 'target', sourceFiles: 'target/*.jar')],
                                         usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
             }
         }
