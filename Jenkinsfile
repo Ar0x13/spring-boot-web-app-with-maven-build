@@ -71,7 +71,7 @@ pipeline {
 
         stage('Deploy to prod2') {
             steps {           
-                sshPublisher(publishers: [sshPublisherDesc(configName: 'prod1', transfers: [sshTransfer(cleanRemote: false, excludes: '',
+                sshPublisher(publishers: [sshPublisherDesc(configName: 'prod2', transfers: [sshTransfer(cleanRemote: false, excludes: '',
                                         execCommand: 'ls -l $HOME', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false,
                                         patternSeparator: '[, ]+', remoteDirectorySDF: false, removePrefix: 'target', sourceFiles: 'target/*.jar')],
                                         usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
