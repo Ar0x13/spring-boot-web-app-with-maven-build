@@ -23,82 +23,89 @@ pipeline {
     // }
    
     stages {   
-        stage('test java installation') {
+        stage('test java and maven installation') {
             steps {
                 sh 'java -version'
                 sh 'which java'
-            }
-        }
-
-        stage('test maven installation') {
-            steps {
                 sh 'mvn -version'
                 sh 'which mvn'
             }
-        }  
+        }
+
+        stage('Checkout repo') {           
+            steps {             
+                // checkout code from repo
+                checkout scm
+            }                      
+        }
 
         stage('Build') {           
-            steps {  
-                // checkout code from repo
-                checkout scm                      
-               
-                // sh "mvn ${env.MAVEN_PARAMS}"
-                // build project, but skip running tests
-                sh "mvn clean install"                           
+            steps {          
+                dir('my_project') {  
+                    // sh "mvn ${env.MAVEN_PARAMS}" 
+                    sh "mvn clean install"   
+                }                 
             }
-            post {
-                success {
-                    // stash name: "app", includes: "target/*.jar"
-                    
-                    // Archive the built artifacts
-                    archiveArtifacts artifacts: 'target/*.jar', onlyIfSuccessful: true, fingerprint: true
-                }
-            }
+            // post {
+            //     success {
+            //         // stash name: "app", includes: "target/*.jar"
+            //         // Archive the built artifacts
+            //         // archiveArtifacts artifacts: 'target/*.jar', onlyIfSuccessful: true, fingerprint: true
+            //     }
+            // }
         }
         
-        stage('Deploy to PROD1') {                       
-            agent {
-                node 'prod1'
-            }
+        stage('Archive') {
+            steps {
+                dir ('myproject/target') {
+                archive '*.jar'
+                }  
+            } 
+        } 
 
-            steps {               
-                sh 'pwd'        
-                // unstash "app"
-                
-                // sh 'nohup java -jar /home/jenkins/target/*.jar &' 
+        // stage('Deploy to PROD1') {                       
+        //     agent {
+        //         node 'prod1'
+        //     }
 
-                // Arhchieve ?
-                step([  $class: 'CopyArtifact',
-                     filter: 'target/*.jar',
-                     fingerprintArtifacts: true,
-                     projectName: '${JOB_NAME}',
-                     selector: [$class: 'SpecificBuildSelector', buildNumber: '${BUILD_NUMBER}'],
-                     target: '/home/jenkins/'                 
-                ])             
-            }   
-        }
-            
-        stage('Deploy to PROD2') {                       
-            agent {
-                node 'prod2'
-            }
-            
-            steps {      
-                sh 'pwd'                            
-                // unstash "app"
+        //     steps {               
+        //         sh 'pwd'        
+        //         // unstash "app"
                 
-                // sh 'nohup java -jar /home/jenkins/target/*.jar &'
-                step([  $class: 'CopyArtifact',
-                    filter: 'target/*.jar',
-                     fingerprintArtifacts: true,
-                     projectName: '${JOB_NAME}',
-                     selector: [$class: 'SpecificBuildSelector', buildNumber: '${BUILD_NUMBER}'],
-                     target: '/home/jenkins/'                 
-                ])                     
-            }
+        //         // sh 'nohup java -jar /home/jenkins/target/*.jar &' 
+
+        //         // Arhchieve ?
+        //         step([  $class: 'CopyArtifact',
+        //              filter: 'target/*.jar',
+        //              fingerprintArtifacts: true,
+        //              projectName: '${JOB_NAME}',
+        //              selector: [$class: 'SpecificBuildSelector', buildNumber: '${BUILD_NUMBER}'],
+        //              target: '/home/jenkins/'                 
+        //         ])             
+        //     }   
+        // }
             
-        }
-    }
+        // stage('Deploy to PROD2') {                       
+        //     agent {
+        //         node 'prod2'
+        //     }
+            
+        //     steps {      
+        //         sh 'pwd'                            
+        //         // unstash "app"
+                
+        //         // sh 'nohup java -jar /home/jenkins/target/*.jar &'
+        //         step([  $class: 'CopyArtifact',
+        //             filter: 'target/*.jar',
+        //              fingerprintArtifacts: true,
+        //              projectName: '${JOB_NAME}',
+        //              selector: [$class: 'SpecificBuildSelector', buildNumber: '${BUILD_NUMBER}'],
+        //              target: '/home/jenkins/'                 
+        //         ])                     
+        //     }
+            
+        // }
+    // }
 
     post {
         success {
