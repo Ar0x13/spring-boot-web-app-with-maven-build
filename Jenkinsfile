@@ -60,13 +60,14 @@ pipeline {
             }
         }
 
-        stage('Deploy to prod1') {           
-            sshPublisher(publishers: [sshPublisherDesc(configName: 'prod1', transfers: [sshTransfer(cleanRemote: false, excludes: '',
-                                    execCommand: 'ls -l ', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false,
-                                    patternSeparator: '[, ]+', remoteDirectory: '/home/jenkins', remoteDirectorySDF: false, removePrefix: 'target', sourceFiles: 'target/*.jar')],
-                                    usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
+        stage('Deploy to prod1') {
+            steps {           
+                sshPublisher(publishers: [sshPublisherDesc(configName: 'prod1', transfers: [sshTransfer(cleanRemote: false, excludes: '',
+                                        execCommand: 'ls -l ', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false,
+                                        patternSeparator: '[, ]+', remoteDirectory: '/home/jenkins', remoteDirectorySDF: false, removePrefix: 'target', sourceFiles: 'target/*.jar')],
+                                        usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
+            }
         }
-
     }
 
     post {
