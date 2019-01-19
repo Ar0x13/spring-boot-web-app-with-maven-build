@@ -45,10 +45,8 @@ pipeline {
 
         stage('Build') {           
             steps {          
-                dir('my_project') {  
-                    // sh "mvn ${env.MAVEN_PARAMS}" 
-                    sh "mvn clean install"   
-                }                 
+                // sh "mvn ${env.MAVEN_PARAMS}" 
+                sh "mvn clean install"   
             }
 
             post {
@@ -61,7 +59,7 @@ pipeline {
         }
 
     }
-    
+
     post {
         success {
             echo 'Build succeeded.'
