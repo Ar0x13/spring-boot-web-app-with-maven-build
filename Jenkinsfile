@@ -64,7 +64,7 @@ pipeline {
             steps { 
                 // copy artifcat to production nodes         
                 sshPublisher(publishers: [sshPublisherDesc(configName: 'prod1', transfers: [sshTransfer(cleanRemote: false, excludes: '',
-                                        execCommand: 'java -jar $HOME/*.jar', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false,
+                                        execCommand: 'java -jar $HOME/*.jar &', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false,
                                         patternSeparator: '[, ]+', remoteDirectorySDF: false, removePrefix: 'target', sourceFiles: 'target/*.jar')],
                                         usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
             }
@@ -74,7 +74,7 @@ pipeline {
             steps {  
                 // copy artifcat to production nodes 
                 sshPublisher(publishers: [sshPublisherDesc(configName: 'prod2', transfers: [sshTransfer(cleanRemote: false, excludes: '',
-                                        execCommand: ' java -jar $HOME/*.jar', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false,
+                                        execCommand: ' java -jar $HOME/*.jar &', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false,
                                         patternSeparator: '[, ]+', remoteDirectorySDF: false, removePrefix: 'target', sourceFiles: 'target/*.jar')],
                                         usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
             }
