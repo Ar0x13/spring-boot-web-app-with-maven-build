@@ -68,8 +68,8 @@ pipeline {
         stage('Stop java on prod') {
             steps {
                 sh '''
-                    ssh $PROD1 'pkill -f \'java -jar\''
-                    ssh $PROD2 'pkill -f \'java -jar\''
+                    ssh $PROD1 'pkill -f 'java -jar''
+                    ssh $PROD2 'pkill -f 'java -jar''
                 '''
             }
         }
