@@ -11,7 +11,7 @@ pipeline {
     }
     
     environment {
-        PROD1 = 'jenkins@54.154.228.251',
+        PROD1 = 'jenkins@54.154.228.251'
         PROD2 = 'jenkins@34.253.229.159'
     }
  opt
