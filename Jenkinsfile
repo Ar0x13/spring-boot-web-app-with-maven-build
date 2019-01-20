@@ -66,12 +66,14 @@ pipeline {
         }
         
         stage('Stop java on prod') {
-            sh '''
-                ssh $PROD1
-                pkill -f 'java -jar'
-                ssh $PROD2
-                pkill -f 'java -jar'
-            '''
+            steps {
+                sh '''
+                    ssh $PROD1
+                    pkill -f 'java -jar'
+                    ssh $PROD2
+                    pkill -f 'java -jar'
+                '''
+            }
         }
         
         stage('Deploy to prod1') {
