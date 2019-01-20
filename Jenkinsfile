@@ -13,7 +13,6 @@ pipeline {
     environment {
         PROD1 = 'jenkins@54.154.228.251'
         PROD2 = 'jenkins@34.253.229.159'
-        VERSION = readMavenPom().getVersion()
     }
 
     // using the Timestamper plugin we can add timestamps to the console log
