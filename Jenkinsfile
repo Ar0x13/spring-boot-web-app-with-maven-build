@@ -86,7 +86,6 @@ pipeline {
                                           cd /home/jenkins && 
                                           java -jar *-SNAPSHOT.jar 2>&1
                                           ''',
-                                          ''',
                                           execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false,
                                           patternSeparator: '[, ]+', remoteDirectorySDF: false, removePrefix: 'target', sourceFiles: 'target/*.jar')],
                                           usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
