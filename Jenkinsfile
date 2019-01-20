@@ -68,8 +68,8 @@ pipeline {
         stage('Stop java on prod') {
             steps {
                 sshagent(credentials : ['58813893-d334-4f40-9a70-196b5fe89664']) {
-                        sh 'ssh -o StrictHostKeyChecking=no $PROD1 ps aux | grep java | head -n 1'
-                        sh 'ssh -o StrictHostKeyChecking=no $PROD2 ps aux | grep java | head -n 1'
+                        sh 'ssh -o StrictHostKeyChecking=no $PROD1 \'ps aux | grep java | head -n 1\''
+                        sh 'ssh -o StrictHostKeyChecking=no $PROD2 \'ps aux | grep java | head -n 1\''
                 }
             }
         }
@@ -82,6 +82,7 @@ pipeline {
                                           execCommand:'''
                                               cd /home/jenkins 
                                               java -jar *-SNAPSHOT.jar &
+                                              exit 0
                                           ''',
                                           execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false,
                                           patternSeparator: '[, ]+', remoteDirectorySDF: false, removePrefix: 'target', sourceFiles: 'target/*.jar')],
@@ -97,6 +98,7 @@ pipeline {
                                          execCommand:'''
                                              cd /home/jenkins 
                                              java -jar *-SNAPSHOT.jar &
+                                             exit 0
                                           ''',
                                           execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false,
                                           patternSeparator: '[, ]+', remoteDirectorySDF: false, removePrefix: 'target', sourceFiles: 'target/*.jar')],
