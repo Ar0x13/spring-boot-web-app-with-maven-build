@@ -13,6 +13,7 @@ pipeline {
     environment {
         PROD1 = 'jenkins@54.154.228.251'
         PROD2 = 'jenkins@34.253.229.159'
+        VERSION = readMavenPom().getVersion()
     }
 
     // using the Timestamper plugin we can add timestamps to the console log
@@ -68,10 +69,8 @@ pipeline {
         stage('Stop java on prod') {
             steps {
                 sh '''
-                    ssh $PROD1
-                    pkill -f 'java -jar'
-                    ssh $PROD2
-                    pkill -f 'java -jar'
+                    ssh $PROD1 'pkill -f \'java -jar\''
+                    ssh $PROD2 'pkill -f \'java -jar\''
                 '''
             }
         }
