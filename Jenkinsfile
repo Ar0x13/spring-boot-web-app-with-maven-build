@@ -11,8 +11,8 @@ pipeline {
     }
     
     environment {
-        PROD1 = 'jenkins@54.154.228.251'
-        PROD2 = 'jenkins@34.253.229.159'
+        PROD1 = ''
+        PROD2 = ''
     }
 
     // using the Timestamper plugin we can add timestamps to the console log
@@ -68,8 +68,8 @@ pipeline {
         stage('Stop java on prod') {
             steps {
                 sshagent(credentials : ['58813893-d334-4f40-9a70-196b5fe89664']) {
-                        sh 'ssh -o StrictHostKeyChecking=no $PROD1 \'ps aux | grep java | head -n 1\''
-                        sh 'ssh -o StrictHostKeyChecking=no $PROD2 \'ps aux | grep java | head -n 1\''
+                        sh 'ssh -o StrictHostKeyChecking=no jenkins@$PROD1 \'ps aux | grep java | head -n 1\''
+                        sh 'ssh -o StrictHostKeyChecking=no jenkins@$PROD2 \'ps aux | grep java | head -n 1\''
                 }
             }
         }
