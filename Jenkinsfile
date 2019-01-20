@@ -66,13 +66,14 @@ pipeline {
                 // copy artifcat to production nodes         
                 sshPublisher(publishers: [sshPublisherDesc(configName: 'prod1', transfers: [sshTransfer(cleanRemote: false, excludes: '',
                                           execCommand:'''
-                                            if [[ echo $(ps aux | grep java | wc -l) >= 2 ]] ; then
-                                                echo "Find java...try to kill process..."
-                                                pkill -f 'java -jar'
-                                            else
-                                                cd /home/jenkins 
-                                                java -jar *-SNAPSHOT.jar
-                                            fi
+                                                if [[ $(ps aux | grep java | wc -l ) -ge 2 ]] ; then
+                                                    echo "Find java...try to kill process..."
+                                                    pkill -f 'java -jar'
+                                                else
+                                                    echo "No java process...Starting web-java app"
+                                                    cd /home/jenkins 
+                                                    java -jar *-SNAPSHOT.jar &
+                                                fi
                                           ''',
                                           execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false,
                                           patternSeparator: '[, ]+', remoteDirectorySDF: false, removePrefix: 'target', sourceFiles: 'target/*.jar')],
@@ -86,9 +87,14 @@ pipeline {
                 // copy artifcat to production nodes 
                 sshPublisher(publishers: [sshPublisherDesc(configName: 'prod2', transfers: [sshTransfer(cleanRemote: false, excludes: '',
                                          execCommand:'''
-                                          echo $HOSTNAME && 
-                                          cd /home/jenkins && 
-                                          java -jar *-SNAPSHOT.jar 2>&1
+                                            if [[ $(ps aux | grep java | wc -l ) -ge 2 ]] ; then
+                                                echo "Find java...try to kill process..."
+                                                pkill -f 'java -jar'
+                                            else
+                                                echo "No java process...Starting web-java app"
+                                                cd /home/jenkins 
+                                                java -jar *-SNAPSHOT.jar &
+                                            fi
                                           ''',
                                           execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false,
                                           patternSeparator: '[, ]+', remoteDirectorySDF: false, removePrefix: 'target', sourceFiles: 'target/*.jar')],
