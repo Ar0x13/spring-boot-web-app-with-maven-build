@@ -9,7 +9,12 @@ pipeline {
         jdk 'jdk8'
         maven 'mvn3'
     }
-
+    
+    environment {
+        PROD1 = 'jenkins@54.154.228.251',
+        PROD2 = 'jenkins@34.253.229.159'
+    }
+ opt
     // using the Timestamper plugin we can add timestamps to the console log
     options {
         timestamps()
@@ -59,24 +64,24 @@ pipeline {
                 }
             }
         }
-
+        
+        stage('Stop java on prod') {
+            sh '''
+                ssh $PROD1
+                pkill -f 'java -jar'
+                ssh $PROD2
+                pkill -f 'java -jar'
+            '''
+        }
+        
         stage('Deploy to prod1') {
             steps { 
             
                 // copy artifcat to production nodes         
                 sshPublisher(publishers: [sshPublisherDesc(configName: 'prod1', transfers: [sshTransfer(cleanRemote: false, excludes: '',
                                           execCommand:'''
-                                                if [[ $(ps aux | grep java | wc -l ) -ge 2 ]] ; then
-                                                    echo "Find java...try to kill process..."
-                                                    pkill -f 'java -jar'
-                                                    sleep 6s
-                                                    cd /home/jenkins
-                                                    java -jar *-SNAPSHOT.jar &
-                                                else
-                                                    echo "No java process...Starting web-java app"
-                                                    cd /home/jenkins 
-                                                    java -jar *-SNAPSHOT.jar &
-                                                fi
+                                              cd /home/jenkins 
+                                              java -jar *-SNAPSHOT.jar &
                                           ''',
                                           execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false,
                                           patternSeparator: '[, ]+', remoteDirectorySDF: false, removePrefix: 'target', sourceFiles: 'target/*.jar')],
@@ -86,21 +91,12 @@ pipeline {
 
         stage('Deploy to prod2') {
             steps {  
-                sh 'echo $HOSTNAME'
+                
                 // copy artifcat to production nodes 
                 sshPublisher(publishers: [sshPublisherDesc(configName: 'prod2', transfers: [sshTransfer(cleanRemote: false, excludes: '',
                                          execCommand:'''
-                                                if [[ $(ps aux | grep java | wc -l ) -ge 2 ]] ; then
-                                                    echo "Find java...try to kill process..."
-                                                    pkill -f 'java -jar'
-                                                    sleep 6s
-                                                    cd /home/jenkins
-                                                    java -jar *-SNAPSHOT.jar &
-                                                else
-                                                    echo "No java process...Starting web-java app"
-                                                    cd /home/jenkins 
-                                                    java -jar *-SNAPSHOT.jar &
-                                                fi
+                                             cd /home/jenkins 
+                                             java -jar *-SNAPSHOT.jar &
                                           ''',
                                           execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false,
                                           patternSeparator: '[, ]+', remoteDirectorySDF: false, removePrefix: 'target', sourceFiles: 'target/*.jar')],
