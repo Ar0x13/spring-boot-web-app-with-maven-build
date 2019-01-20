@@ -82,7 +82,6 @@ pipeline {
                                           execCommand:'''
                                               cd /home/jenkins 
                                               java -jar *-SNAPSHOT.jar &
-                                              exit 0
                                           ''',
                                           execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false,
                                           patternSeparator: '[, ]+', remoteDirectorySDF: false, removePrefix: 'target', sourceFiles: 'target/*.jar')],
@@ -98,7 +97,6 @@ pipeline {
                                          execCommand:'''
                                              cd /home/jenkins 
                                              java -jar *-SNAPSHOT.jar &
-                                             exit 0
                                           ''',
                                           execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false,
                                           patternSeparator: '[, ]+', remoteDirectorySDF: false, removePrefix: 'target', sourceFiles: 'target/*.jar')],
