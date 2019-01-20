@@ -62,29 +62,25 @@ pipeline {
 
         stage('Deploy to prod1') {
             steps { 
-                sh '''
-                   echo PROD1 -> starting copy artifact
-                   ls -l /home/jenkins
-                '''
+                sh 'echo hostname'
                 // copy artifcat to production nodes         
                 sshPublisher(publishers: [sshPublisherDesc(configName: 'prod1', transfers: [sshTransfer(cleanRemote: false, excludes: '',
-                                        execCommand: 'cd /home/jenkins && java -jar *-SNAPSHOT.jar &', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false,
-                                        patternSeparator: '[, ]+', remoteDirectorySDF: false, removePrefix: 'target', sourceFiles: 'target/*.jar')],
-                                        usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
+                                          execCommand:'pkill -f \'java -jar\' && sleep 6s && cd /home/jenkins && java -jar *-SNAPSHOT.jar &', 
+                                          execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false,
+                                          patternSeparator: '[, ]+', remoteDirectorySDF: false, removePrefix: 'target', sourceFiles: 'target/*.jar')],
+                                          usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
             }
         }
 
         stage('Deploy to prod2') {
             steps {  
-                sh '''
-                   echo PROD2 -> starting copy artifact
-                   ls -l /home/jenkins
-                '''
+                sh 'echo hostname'
                 // copy artifcat to production nodes 
                 sshPublisher(publishers: [sshPublisherDesc(configName: 'prod2', transfers: [sshTransfer(cleanRemote: false, excludes: '',
-                                        execCommand: 'cd /home/jenkins && java -jar *-SNAPSHOT.jar &', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false,
-                                        patternSeparator: '[, ]+', remoteDirectorySDF: false, removePrefix: 'target', sourceFiles: 'target/*.jar')],
-                                        usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
+                                          execCommand:'pkill -f \'java -jar\' && sleep 6s && cd /home/jenkins && java -jar *-SNAPSHOT.jar &', 
+                                          execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false,
+                                          patternSeparator: '[, ]+', remoteDirectorySDF: false, removePrefix: 'target', sourceFiles: 'target/*.jar')],
+                                          usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
             }
         }
     }
