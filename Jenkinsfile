@@ -66,7 +66,7 @@ pipeline {
                 // copy artifcat to production nodes         
                 sshPublisher(publishers: [sshPublisherDesc(configName: 'prod1', transfers: [sshTransfer(cleanRemote: false, excludes: '',
                                           execCommand:'''
-                                            if [[ "$(ps aux | grep java | wc -l)" >= 2 ]] ; then
+                                            if [[ echo $(ps aux | grep java | wc -l) >= 2 ]] ; then
                                                 echo "Find java...try to kill process..."
                                                 pkill -f 'java -jar'
                                             else
