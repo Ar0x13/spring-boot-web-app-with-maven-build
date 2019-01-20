@@ -65,7 +65,7 @@ pipeline {
                 sh 'echo $HOSTNAME'
                 // copy artifcat to production nodes         
                 sshPublisher(publishers: [sshPublisherDesc(configName: 'prod1', transfers: [sshTransfer(cleanRemote: false, excludes: '',
-                                          execCommand:'(pkill -f \'java -jar\' || echo "no Java app") && sleep 6s && cd /home/jenkins && java -jar *-SNAPSHOT.jarc &', 
+                                          execCommand:'pkill -f \'java -jar\' || cd /home/jenkins && java -jar *-SNAPSHOT.jarc &', 
                                           execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false,
                                           patternSeparator: '[, ]+', remoteDirectorySDF: false, removePrefix: 'target', sourceFiles: 'target/*.jar')],
                                           usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
@@ -77,7 +77,7 @@ pipeline {
                 sh 'echo $HOSTNAME'
                 // copy artifcat to production nodes 
                 sshPublisher(publishers: [sshPublisherDesc(configName: 'prod2', transfers: [sshTransfer(cleanRemote: false, excludes: '',
-                                          execCommand:'(pkill -f \'java -jar\' || echo "no Java app") && sleep 6s && cd /home/jenkins && java -jar *-SNAPSHOT.jar &', 
+                                         execCommand:'pkill -f \'java -jar\' || cd /home/jenkins && java -jar *-SNAPSHOT.jarc &', 
                                           execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false,
                                           patternSeparator: '[, ]+', remoteDirectorySDF: false, removePrefix: 'target', sourceFiles: 'target/*.jar')],
                                           usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
