@@ -67,7 +67,6 @@ pipeline {
                 sshPublisher(publishers: [sshPublisherDesc(configName: 'prod1', transfers: [sshTransfer(cleanRemote: false, excludes: '',
                                           execCommand:'''
                                           echo $HOSTNAME && 
-                                          kill -9 $(ps aux | grep java | head -n 1 | awk {'print $2'}) && 
                                           cd /home/jenkins && 
                                           java -jar *-SNAPSHOT.jar 2>&1
                                           ''',
@@ -84,9 +83,9 @@ pipeline {
                 sshPublisher(publishers: [sshPublisherDesc(configName: 'prod2', transfers: [sshTransfer(cleanRemote: false, excludes: '',
                                          execCommand:'''
                                           echo $HOSTNAME && 
-                                          kill -9 $(ps aux | grep java | head -n 1 | awk {'print $2'}) && 
                                           cd /home/jenkins && 
                                           java -jar *-SNAPSHOT.jar 2>&1
+                                          ''',
                                           ''',
                                           execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false,
                                           patternSeparator: '[, ]+', remoteDirectorySDF: false, removePrefix: 'target', sourceFiles: 'target/*.jar')],
