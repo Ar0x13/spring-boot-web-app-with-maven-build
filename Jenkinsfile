@@ -67,10 +67,10 @@ pipeline {
         
         stage('Stop java on prod') {
             steps {
-                sh '''
-                    ssh $PROD1 'pkill -f 'java -jar''
-                    ssh $PROD2 'pkill -f 'java -jar''
-                '''
+                sshagent(credentials : ['58813893-d334-4f40-9a70-196b5fe89664']) {
+                        sh 'ssh -o StrictHostKeyChecking=no $PROD1 pkill -f \'java -jar\''
+                        sh 'ssh -o StrictHostKeyChecking=no $PROD2 pkill -f \'java -jar\''
+                }
             }
         }
         
