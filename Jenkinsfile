@@ -68,8 +68,8 @@ pipeline {
         stage('Stop java on prod') {
             steps {
                 sshagent(credentials : ['58813893-d334-4f40-9a70-196b5fe89664']) {
-                        sh 'ssh -o StrictHostKeyChecking=no jenkins@$PROD1 \'ps aux | grep java | head -n 1\''
-                        sh 'ssh -o StrictHostKeyChecking=no jenkins@$PROD2 \'ps aux | grep java | head -n 1\''
+                   sh 'ssh -o StrictHostKeyChecking=no jenkins@$PROD1 systemctl stop app.service && sleep 5s'
+                   sh 'ssh -o StrictHostKeyChecking=no jenkins@$PROD2 systemctl stop app.service && sleep 5s'
                 }
             }
         }
@@ -80,8 +80,7 @@ pipeline {
                 // copy artifcat to production nodes         
                 sshPublisher(publishers: [sshPublisherDesc(configName: 'prod1', transfers: [sshTransfer(cleanRemote: false, excludes: '',
                                           execCommand:'''
-                                              cd /home/jenkins 
-                                              java -jar *-SNAPSHOT.jar &
+                                              systemctl start app.service
                                           ''',
                                           execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false,
                                           patternSeparator: '[, ]+', remoteDirectorySDF: false, removePrefix: 'target', sourceFiles: 'target/*.jar')],
@@ -95,8 +94,7 @@ pipeline {
                 // copy artifcat to production nodes 
                 sshPublisher(publishers: [sshPublisherDesc(configName: 'prod2', transfers: [sshTransfer(cleanRemote: false, excludes: '',
                                          execCommand:'''
-                                             cd /home/jenkins 
-                                             java -jar *-SNAPSHOT.jar &
+                                            systemctl start app.service
                                           ''',
                                           execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false,
                                           patternSeparator: '[, ]+', remoteDirectorySDF: false, removePrefix: 'target', sourceFiles: 'target/*.jar')],
