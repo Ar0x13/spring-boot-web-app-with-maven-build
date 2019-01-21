@@ -11,8 +11,8 @@ pipeline {
     }
     
     environment {
-        PROD1 = ''
-        PROD2 = ''
+        PROD1 = '34.240.101.8'
+        PROD2 = '52.211.51.87'
     }
 
     // using the Timestamper plugin we can add timestamps to the console log
