@@ -68,8 +68,8 @@ pipeline {
         stage('Stop java on prod') {
             steps {
                 sshagent(credentials : ['58813893-d334-4f40-9a70-196b5fe89664']) {
-                   sh 'ssh -o StrictHostKeyChecking=no jenkins@$PROD1 systemctl stop app.service && sleep 5s'
-                   sh 'ssh -o StrictHostKeyChecking=no jenkins@$PROD2 systemctl stop app.service && sleep 5s'
+                   sh 'ssh -o StrictHostKeyChecking=no jenkins@$PROD1 systemctl echo $HOSTNAME && echo $ID && stop app.service && sleep 5s'
+                   sh 'ssh -o StrictHostKeyChecking=no jenkins@$PROD2 systemctl echo $HOSTNAME && echo $ID && stop app.service && sleep 5s'
                 }
             }
         }
