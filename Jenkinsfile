@@ -19,6 +19,9 @@ pipeline {
     options {
         timestamps()
         timeout(time: 20, unit: 'MINUTES')
+        
+        // Only keep the 10 most recent builds
+        buildDiscarder(logRotator(numToKeepStr:'10'))
     }
     
     // parameters {
